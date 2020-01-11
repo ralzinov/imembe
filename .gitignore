@@ -1,0 +1,8 @@
+**/node_modules/
+**/.vscode
+**/.idea
+
+**/.env
+**/*.log
+**/*.js
+**/*.js.map
