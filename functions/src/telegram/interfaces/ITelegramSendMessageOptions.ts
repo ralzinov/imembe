@@ -1,6 +1,6 @@
 export interface ITelegramSendMessageOptions {
-    method: 'sendMessage'; // ???, TODO find api for this
-
+    /* Available methods: https://core.telegram.org/bots/api#available-methods */
+    method: string;
     chat_id: string|number;
     text: string;
     parse_mode?: string;
