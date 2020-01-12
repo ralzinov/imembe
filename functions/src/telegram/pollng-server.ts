@@ -1,8 +1,8 @@
 import * as path from 'path';
 import * as dotenv from 'dotenv';
 import * as NodeTelegramBotApi from 'node-telegram-bot-api';
-import {TelegramBot} from './telegram-bot';
 import {IAppEnvVariables, ITelegramMessage} from './interfaces';
+import {TelegramBot} from './telegram-bot';
 
 const env = dotenv.config({path: path.join(__dirname, '../../../.env')});
 if (!env.parsed?.TELEGRAM_TEST_BOT_TOKEN) {
@@ -18,9 +18,10 @@ app.on('message', (msg) => {
     console.log('Got message:');
     console.log(JSON.stringify(msg, null, 4));
     const response = bot.onMessage(<ITelegramMessage>msg);
-    app.sendMessage(chatId, response.text, <NodeTelegramBotApi.SendMessageOptions>response).catch(() => {
-        console.error('Failed to send message')
-    });
+    app.sendMessage(chatId, response.text, <NodeTelegramBotApi.SendMessageOptions>response)
+        .catch(() => {
+            console.error('Failed to send message')
+        });
 });
 
 console.log('start');
