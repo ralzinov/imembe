@@ -18,10 +18,14 @@ app.on('message', (msg) => {
     console.log('Got message:');
     console.log(JSON.stringify(msg, null, 4));
     const response = bot.onMessage(<ITelegramMessage>msg);
-    app.sendMessage(chatId, response.text, <NodeTelegramBotApi.SendMessageOptions>response)
-        .catch(() => {
-            console.error('Failed to send message')
-        });
+    if (response) {
+        app.sendMessage(chatId, response.text, <NodeTelegramBotApi.SendMessageOptions>response)
+            .catch((e) => {
+                console.error('Failed to send message', e)
+            });
+    } else {
+        console.log('Ignoring non-command message');
+    }
 });
 
 console.log('start');

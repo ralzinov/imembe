@@ -16,11 +16,12 @@ export const telegramFunctionFactory = (): express.Express => {
             console.log(JSON.stringify(req.body, null, 4));
         }
         if (isTelegramMessage(req)) {
-            const resp = bot.onMessage(req.body.message);
-            return res.status(200).send(resp);
+            return res.status(200).send(
+                bot.onMessage(req.body.message)
+            );
         }
         console.log('Ignoring unknown message');
-        return res.status(200).send(void 0);
+        return Promise.resolve(null);
     });
     return app;
 };

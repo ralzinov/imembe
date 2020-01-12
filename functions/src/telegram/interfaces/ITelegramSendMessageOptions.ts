@@ -4,8 +4,8 @@ export interface ITelegramSendMessageOptions {
     chat_id: string|number;
     text: string;
     parse_mode?: string;
-    disable_web_page_preview?: string;
-    disable_notification?: string;
-    reply_to_message_id?: string;
+    disable_web_page_preview?: boolean;
+    disable_notification?: boolean;
+    reply_to_message_id?: number;
     reply_markup?: string;
 }

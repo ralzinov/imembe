@@ -6,9 +6,9 @@ import {HelpMessage} from '../../../messages/help';
     match: '/help'
 })
 export class HelpCommand implements ICommandHandler {
-    handle({chat}: ITelegramMessage): ITelegramSendMessageOptions {
+    handle(msg: ITelegramMessage): ITelegramSendMessageOptions {
         // construct message text with registered commands
         // add description to commands decorator
-        return new HelpMessage(chat.id);
+        return new HelpMessage(msg);
     }
 }

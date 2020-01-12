@@ -10,11 +10,12 @@ export class CommandsHandler {
     }
 
     static handle(msg: ITelegramMessage): ITelegramSendMessageOptions {
-        const {chat, text = ''} = msg;
-        const handler = this.registry[text.trim()];
+        const {text = ''} = msg;
+        const name = text.trim().split('@')[0];
+        const handler = this.registry[name];
         if (handler) {
             return handler.handle(msg);
         }
-        return new UnknownCommandMessage(chat.id);
+        return new UnknownCommandMessage(msg);
     }
 }

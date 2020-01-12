@@ -1,9 +1,8 @@
-import {ITelegramSendMessageOptions} from '../../../interfaces';
+import {BaseMessage} from '../base';
 
-const MESSAGE_TEXT = 'Oo! I will membe this!';
+const MESSAGE_TEXT = 'Oo! I\'ll membe!';
 
-export class MessageReceivedMessage implements ITelegramSendMessageOptions {
+export class MessageReceivedMessage extends BaseMessage {
     method = 'sendMessage';
     text = MESSAGE_TEXT;
-    constructor(public chat_id: string|number) {}
 }

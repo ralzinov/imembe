@@ -1,9 +1,8 @@
-import {ITelegramSendMessageOptions} from '../../../interfaces';
+import {BaseMessage} from '../base';
 
-const MESSAGE_TEXT = `Unknown command`;
+const MESSAGE_TEXT = `I don't membe this command...`;
 
-export class UnknownCommandMessage implements ITelegramSendMessageOptions {
+export class UnknownCommandMessage extends BaseMessage {
     text = MESSAGE_TEXT;
     method = 'sendMessage';
-    constructor(public chat_id: string|number) {}
 }
