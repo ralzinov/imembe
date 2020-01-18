@@ -1,7 +1,7 @@
 import {HelpMessage, IHelpMessageCommandDescriptionItem} from '../../../messages/help';
 import {ITelegramMessage, ITelegramSendMessageOptions} from '../../../../interfaces';
 import {Command, ICommandHandler} from '../../../entities/command';
-import {CommandsHandler} from '../../commands-handler';
+import {CommandRegistry} from '../../../entities/command/registry';
 
 @Command({
     match: '/help',
@@ -14,7 +14,7 @@ export class HelpCommand implements ICommandHandler {
     }
 
     private getCommandsList(): IHelpMessageCommandDescriptionItem[] {
-        const metadata = CommandsHandler.getMetadata();
+        const metadata = CommandRegistry.getMetadata();
         return Object.keys(metadata)
             .map((name) => ({
                 description: metadata[name].description || 'No description',

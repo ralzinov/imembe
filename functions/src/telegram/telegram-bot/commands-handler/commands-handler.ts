@@ -1,6 +1,6 @@
 import {ITelegramMessage, ITelegramSendMessageOptions} from '../../interfaces';
-import {ICommandHandler, ICommandMetadata} from '../entities/command/interfaces';
 import {UnknownCommandMessage} from '../messages/unknown-command';
+import {CommandRegistry} from '../entities/command/registry';
 
 /**
  * Parses following values:
@@ -15,34 +15,15 @@ const COMMAND_WITH_OPTIONAL_VALUE = {
     VALUE_INDEX: 3
 };
 
-// TODO:refactor - split class to registry & handler
 export class CommandsHandler {
-    private static registry: Dict<{ name: string; handler: ICommandHandler; metadata: ICommandMetadata }> = {};
-
-    static getMetadata(): Dict<ICommandMetadata> {
-        return Object.keys(this.registry)
-            .reduce((acc, name) => {
-                acc[name] = this.registry[name].metadata;
-                return acc;
-            }, <Dict<ICommandMetadata>>{});
-    }
-
-    static register(name: string, handler: ICommandHandler, metadata: ICommandMetadata): void {
-        this.registry[name] = {name, handler, metadata};
-    }
-
     static handle(msg: ITelegramMessage): ITelegramSendMessageOptions {
         const {text = ''} = msg;
-        const parsed = this.parseText(text);
+        const {command, value} = this.parseText(text);
 
-        if (parsed?.command) {
-            const command = parsed.command.toLowerCase();
-            console.log(`Got "${command}" command with "${parsed.value}" value`);
-
-            const registeredItem = this.registry[command];
-            if (registeredItem) {
-                return registeredItem.handler.handle(msg, parsed.value);
-            }
+        if (command && CommandRegistry.has(command)) {
+            const {handler} = CommandRegistry.get(command);
+            console.log(`Got "${command}" command with "${value}" value`);
+            return handler.handle(msg, value);
         }
 
         return new UnknownCommandMessage(msg);
@@ -51,16 +32,16 @@ export class CommandsHandler {
     /**
      * Try to parse passed text to command and value
      */
-    private static parseText(text: string = ''): { command: string; value: string } | undefined {
+    private static parseText(text: string = ''): { command?: string; value?: string } {
         const parts = text.match(COMMAND_WITH_OPTIONAL_VALUE.REGEX);
         if (!parts) {
-            return void 0;
+            return {};
         }
 
         const value = parts[COMMAND_WITH_OPTIONAL_VALUE.VALUE_INDEX];
         let command = parts[COMMAND_WITH_OPTIONAL_VALUE.COMMAND_INDEX];
         if (command.includes('@')) {
-            command = command.split('@')[0];
+            command = command.split('@')[0].toLowerCase();
         }
         return {command, value};
     }
