@@ -1,14 +1,33 @@
-import {Command, ICommandHandler} from '../../../entities/command';
+import {HelpMessage, IHelpMessageCommandDescriptionItem} from '../../../messages/help';
 import {ITelegramMessage, ITelegramSendMessageOptions} from '../../../../interfaces';
-import {HelpMessage} from '../../../messages/help';
+import {Command, ICommandHandler} from '../../../entities/command';
+import {CommandsHandler} from '../../commands-handler';
 
 @Command({
-    match: '/help'
+    match: '/help',
+    description: 'Page with commands and functionality description'
 })
 export class HelpCommand implements ICommandHandler {
     handle(msg: ITelegramMessage): ITelegramSendMessageOptions {
-        // construct message text with registered commands
-        // add description to commands decorator
-        return new HelpMessage(msg);
+        const commands = this.getCommandsList();
+        return new HelpMessage(msg, commands);
+    }
+
+    private getCommandsList(): IHelpMessageCommandDescriptionItem[] {
+        const metadata = CommandsHandler.getMetadata();
+        return Object.keys(metadata)
+            .map((name) => ({
+                description: metadata[name].description || 'No description',
+                name
+            }))
+            .sort((a, b) => {
+                if (a.name > b.name) {
+                    return 1;
+                }
+                if (a.name < b.name) {
+                    return -1;
+                }
+                return 0;
+            });
     }
 }

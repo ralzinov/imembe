@@ -1,1 +1,2 @@
-export * from './help';
+import './help';
+import './add';

@@ -1,5 +1,5 @@
 import {ITelegramMessage, ITelegramSendMessageOptions} from '../../../../interfaces';
 
 export interface ICommandHandler {
-    handle({chat}: ITelegramMessage): ITelegramSendMessageOptions;
+    handle(msg: ITelegramMessage, value?: string): ITelegramSendMessageOptions;
 }

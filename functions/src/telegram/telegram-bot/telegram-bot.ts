@@ -7,9 +7,6 @@ export class TelegramBot {
         if(this.isCommand(msg)) {
             return CommandsHandler.handle(msg);
         }
-        // save message
-        // schedule notification
-        // return new MessageReceivedMessage(msg.chat.id);
         return void 0;
     }
 
